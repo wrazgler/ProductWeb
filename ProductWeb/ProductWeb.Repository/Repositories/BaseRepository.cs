@@ -8,16 +8,16 @@ namespace ProductWeb.Repository.Repositories
 {
     public class BaseRepository : IBaseRepository
     {
-        protected RepositoryContext Database { get; }
+        public RepositoryContext Database { get; }
         protected IRepositoryContextFactory ContextFactory { get; }
 
         protected CategoryRepository CategoryRepository { get; set; }
         protected ProductRepository ProductRepository { get; set; }
 
-        public BaseRepository(string connectionString, IRepositoryContextFactory contextFactory)
+        public BaseRepository(string connectionString, bool IsPostgreSQL, IRepositoryContextFactory contextFactory)
         {
             ContextFactory = contextFactory;
-            Database = ContextFactory.CreateDbContext(connectionString);
+            Database = ContextFactory.CreateDbContext(connectionString, IsPostgreSQL);
         }
 
         public IRepository<Category> Categories

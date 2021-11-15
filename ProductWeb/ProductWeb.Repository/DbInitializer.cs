@@ -10,6 +10,7 @@ namespace ProductWeb.Repository
     {
         public static void Initialize(RepositoryContext db)
         {
+            db.Database.EnsureCreated();
             db.Database.Migrate();
 
             if (db.Products.Any()) 

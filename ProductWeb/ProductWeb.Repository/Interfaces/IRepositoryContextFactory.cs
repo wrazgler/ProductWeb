@@ -2,6 +2,6 @@
 {
     public interface IRepositoryContextFactory
     {
-        RepositoryContext CreateDbContext(string connectionString);
+        RepositoryContext CreateDbContext(string connectionString, bool IsPostgreSQL);
     }
 }

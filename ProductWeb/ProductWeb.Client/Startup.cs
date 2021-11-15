@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ProductWeb.Model.Interfaces;
 using ProductWeb.Model.Services;
 
+using ProductWeb.Repository;
 using ProductWeb.Repository.Factories;
 using ProductWeb.Repository.Interfaces;
 using ProductWeb.Repository.Repositories;
@@ -27,17 +28,30 @@ namespace ProductWeb.Client
             string connection = Configuration.GetConnectionString("MSSQLConnection");
             //string connection = Configuration.GetConnectionString("PostgreSQLConnection");
 
+            var isPostgreSQL = false;
+
+            if (connection == Configuration.GetConnectionString("PostgreSQLConnection"))
+            {
+                isPostgreSQL = true;
+            }
+
+            services.AddScoped<IContextOptions>(contextOptions => 
+                new ContextOptions 
+                { 
+                    ConnectionString = connection, 
+                    IsPostgreSQL = isPostgreSQL 
+                }) ;
+
             services.AddScoped<IRepositoryContextFactory, RepositoryContextFactory>();
-
-            //services.AddDbContext<RepositoryContext>(options => options.UseSqlServer(connection));
-            //services.AddDbContext<RepositoryContext>(options => options.UseNpgsql(connection));
-
+            
             services.AddScoped<IBaseRepository>(provider =>
-                new BaseRepository(connection, 
+                new BaseRepository(connection, isPostgreSQL,
                     provider.GetService<IRepositoryContextFactory>()));
 
+            
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+
             services.AddControllersWithViews();
         }
 

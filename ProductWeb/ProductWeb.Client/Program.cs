@@ -16,12 +16,6 @@ namespace ProductWeb.Client
     {
         public static void Main(string[] args)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-
-            var config = builder.Build();
-
             var host = BuildWebHost(args);
 
             using (var scope = host.Services.CreateScope())
@@ -31,10 +25,11 @@ namespace ProductWeb.Client
                 try
                 {
                     var factory = services.GetRequiredService<IRepositoryContextFactory>();
-                    using (var context = factory.CreateDbContext(config.GetConnectionString("MSSQLConnection")))
+
+                    var contextOptions = services.GetRequiredService<IContextOptions>();
+
+                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString, contextOptions.IsPostgreSQL))
                     {
-                        // Накатываем все миграции которых нет в базе
-                        // И инициализируем необходимые данные
                         DbInitializer.Initialize(context);
                     }
                 }
