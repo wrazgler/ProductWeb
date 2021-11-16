@@ -29,6 +29,7 @@ namespace ProductWeb.Repository.Repositories
                 .Include(p => p.Categories)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+
         public async Task<Product> GetByName(string name)
         {
             return await _db.Products

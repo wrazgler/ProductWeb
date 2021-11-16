@@ -7,6 +7,11 @@ namespace ProductWeb.Model.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public List<CategoryModel> Categories { get; set; } = new List<CategoryModel>();
+        public List<CategoryModel> Categories { get; set; }
+
+        public ProductModel()
+        {
+            Categories = new List<CategoryModel>();
+        }
     }
 }

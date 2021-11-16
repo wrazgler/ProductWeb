@@ -6,11 +6,11 @@ namespace ProductWeb.Repository.Factories
 {
     public class RepositoryContextFactory: IRepositoryContextFactory
     {
-        public RepositoryContext CreateDbContext(string connectionString, bool isPostgreSQL)
+        public RepositoryContext CreateDbContext(string connectionString, bool isPostgreSql)
         {
             var optionsBuilder = new DbContextOptionsBuilder<RepositoryContext>();
 
-            if (isPostgreSQL)
+            if (isPostgreSql)
             {
                 optionsBuilder.UseNpgsql(connectionString);
             }

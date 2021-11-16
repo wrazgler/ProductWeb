@@ -10,34 +10,23 @@ namespace ProductWeb.Repository.Repositories
     {
         public RepositoryContext Database { get; }
         protected IRepositoryContextFactory ContextFactory { get; }
-
         protected CategoryRepository CategoryRepository { get; set; }
         protected ProductRepository ProductRepository { get; set; }
 
-        public BaseRepository(string connectionString, bool IsPostgreSQL, IRepositoryContextFactory contextFactory)
+        public BaseRepository(string connectionString, bool isPostgreSql, IRepositoryContextFactory contextFactory)
         {
             ContextFactory = contextFactory;
-            Database = ContextFactory.CreateDbContext(connectionString, IsPostgreSQL);
+            Database = ContextFactory.CreateDbContext(connectionString, isPostgreSql);
         }
 
         public IRepository<Category> Categories
         {
-            get
-            {
-                if (CategoryRepository == null)
-                    CategoryRepository = new CategoryRepository(Database);
-                return CategoryRepository;
-            }
+            get { return CategoryRepository ??= new CategoryRepository(Database); }
         }
 
         public IRepository<Product> Products
         {
-            get
-            {
-                if (ProductRepository == null)
-                    ProductRepository = new ProductRepository(Database);
-                return ProductRepository;
-            }
+            get { return ProductRepository ??= new ProductRepository(Database); }
         }
         
         public async Task Save()
@@ -45,18 +34,18 @@ namespace ProductWeb.Repository.Repositories
             await Database.SaveChangesAsync();
         }
 
-        private bool disposed = false;
+        private bool _disposed = false;
 
         public virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (this._disposed) 
+                return;
+
+            if (disposing)
             {
-                if (disposing)
-                {
-                    Database.Dispose();
-                }
-                this.disposed = true;
+                Database.Dispose();
             }
+            this._disposed = true;
         }
 
         public void Dispose()

@@ -25,13 +25,13 @@ namespace ProductWeb.Client.Controllers
         {
             var products = _productService.GetAllProducts();
             var categories = _categoryService.GetAllCategories();
-            var filterModel = new FilterViewModel(products, productName, categories, categoryId);
             var model = new GetAllProductsViewModel
             { 
-                FilterViewModel = filterModel,  
-                AllProductsDTO = await _productService
-                    .GetAllAsync(filterModel.SelectedProduct, filterModel.SelectedCategory, page, sortOrder)
-        };
+                FilterViewModel = new FilterViewModel(products, productName, categories, categoryId),
+                AllProductsModel = await _productService
+                    .GetAllAsync(productName, categoryId, page, sortOrder)
+            };
+
             return View(model);
         }
 
@@ -98,6 +98,7 @@ namespace ProductWeb.Client.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
+
             await _productService.DeleteProductAsync(model.Product.Id);
 
             return RedirectToAction("GetAllProducts", "Home", new { page = model.Page });
@@ -127,7 +128,7 @@ namespace ProductWeb.Client.Controllers
             { 
                 Page = page,
                 Product = await _productService.GetProductAsync(id),
-                Selected = await _categoryService.GetSelctedCategories(id)
+                Selected = await _categoryService.GetSelectedCategories(id)
             };
 
             return View(model);

@@ -11,6 +11,7 @@ namespace ProductWeb.Client.ViewModels
         public SelectList Categories { get; }
         public string SelectedProduct { get; }
         public int SelectedCategory{ get; }
+
         public FilterViewModel(List<ProductModel> products, string product, List<CategoryModel> categories, int category)
         {
             Products = products;

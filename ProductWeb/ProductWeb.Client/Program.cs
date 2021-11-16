@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.IO;
 
 using ProductWeb.Repository;
 using ProductWeb.Repository.Interfaces;
@@ -25,10 +22,8 @@ namespace ProductWeb.Client
                 try
                 {
                     var factory = services.GetRequiredService<IRepositoryContextFactory>();
-
                     var contextOptions = services.GetRequiredService<IContextOptions>();
-
-                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString, contextOptions.IsPostgreSQL))
+                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString, contextOptions.IsPostgreSql))
                     {
                         DbInitializer.Initialize(context);
                     }

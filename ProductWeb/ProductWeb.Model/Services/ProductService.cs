@@ -13,7 +13,7 @@ namespace ProductWeb.Model.Services
 {
     public class ProductService : IProductService
     {
-        IBaseRepository Database { get; set; }
+        private IBaseRepository Database { get; }
 
         public ProductService(IBaseRepository baseRepository)
         {
@@ -22,7 +22,7 @@ namespace ProductWeb.Model.Services
 
         public List<ProductModel> GetAllProducts()
         {
-            var productsDTO = new List<ProductModel>();
+            var productsModels = new List<ProductModel>();
             var products = Database.Products.GetAll();
 
             foreach (var product in products)
@@ -30,12 +30,11 @@ namespace ProductWeb.Model.Services
                 var categories = product.Categories
                     .Select(c => new CategoryModel { Id = c.Id, Name = c.Name })
                     .ToList();
-
-                var productDTO = new ProductModel { Id = product.Id, Name = product.Name, Categories = categories};
-                productsDTO.Add(productDTO);
+                var productModel = new ProductModel { Id = product.Id, Name = product.Name, Categories = categories};
+                productsModels.Add(productModel);
             }
 
-            return productsDTO;
+            return productsModels;
         }
 
         public async Task<bool> TryAddProductAsync(SelectedModel selected, string name)
@@ -52,7 +51,6 @@ namespace ProductWeb.Model.Services
             }
 
             var product = new Product { Name = name };
-
             if (selected != null)
             {
                 foreach (var item in selected.SelectedList)
@@ -66,7 +64,6 @@ namespace ProductWeb.Model.Services
                 }
             }
             Database.Products.Create(product);
-
             await Database.Save();
 
             return true;
@@ -82,7 +79,8 @@ namespace ProductWeb.Model.Services
         {
             var product = await Database.Products.GetById(editProduct.Id);
 
-            if (product == null) return;
+            if (product == null) 
+                return;
 
             product.Name = editProduct.Name;
 
@@ -92,13 +90,14 @@ namespace ProductWeb.Model.Services
                 {
                     var select = await Database.Categories.GetByName(item.Category.Name);
 
-                    if (item.IsChecked && !product.Categories.Contains(select))
+                    switch (item.IsChecked)
                     {
-                        product.Categories.Add(select);
-                    }
-                    if (!item.IsChecked && product.Categories.Contains(select))
-                    {
-                        product.Categories.Remove(select);
+                        case true when !product.Categories.Contains(@select):
+                            product.Categories.Add(@select);
+                            break;
+                        case false when product.Categories.Contains(@select):
+                            product.Categories.Remove(@select);
+                            break;
                     }
                 }
             }
@@ -111,7 +110,7 @@ namespace ProductWeb.Model.Services
         {
             const int pageSize = 10;
 
-            var products = new List<Product>();
+            List<Product> products;
 
             var currentCategory = await Database.Categories.GetById(categoryId);
 
@@ -124,29 +123,29 @@ namespace ProductWeb.Model.Services
                 products = Database.Products.GetAll().ToList();
             }
 
-            var productsDTO = Convert(products);
+            var productsModel = Convert(products);
 
             if (!string.IsNullOrEmpty(productName))
             {
-                productsDTO = productsDTO
+                productsModel = productsModel
                     .Where(p => p.Name.ToLower()
                     .Contains(productName.ToLower()))
                     .ToList();
             }
 
-            productsDTO = Sort(sortOrder, productsDTO).ToList();
+            productsModel = Sort(sortOrder, productsModel).ToList();
 
-            var count = productsDTO.Count();
-            var items = productsDTO.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var count = productsModel.Count();
+            var items = productsModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            var allProductsDTO = new AllProductsModel
+            var allProductsModel = new AllProductsModel
             {
-                PageDTO = new PageModel(count, page, pageSize),
-                SortDTO = new SortModel(sortOrder),
+                PageModel = new PageModel(count, page, pageSize),
+                SortModel = new SortModel(sortOrder),
                 Products = items
             };
 
-            return allProductsDTO;
+            return allProductsModel;
         }
 
         public async Task<ProductModel> GetProductAsync(int id)
@@ -156,19 +155,19 @@ namespace ProductWeb.Model.Services
                     .Select(c => new CategoryModel { Id = c.Id, Name = c.Name })
                     .ToList();
 
-            var productDTO = new ProductModel 
+            var productModel = new ProductModel 
             { 
                 Id = product.Id, 
                 Name = product.Name, 
                 Categories = categories 
             };
 
-            return productDTO;
+            return productModel;
         }
 
         public IEnumerable<ProductModel> Convert(IEnumerable<Product> products)
         {
-            var productsDTO = new List<ProductModel>();
+            var productsModel = new List<ProductModel>();
 
             foreach (var product in products)
             {
@@ -176,16 +175,16 @@ namespace ProductWeb.Model.Services
                     .Select(c => new CategoryModel { Id = c.Id, Name = c.Name })
                     .ToList();
 
-                var productDTO = new ProductModel 
+                var productModel = new ProductModel 
                 { 
                     Id = product.Id, 
                     Name = product.Name, 
                     Categories = categories 
                 };
-                productsDTO.Add(productDTO);
+                productsModel.Add(productModel);
             }
 
-            return productsDTO;
+            return productsModel;
         }
 
         public IEnumerable<ProductModel> Sort(SortState sortOrder, IEnumerable<ProductModel> products)

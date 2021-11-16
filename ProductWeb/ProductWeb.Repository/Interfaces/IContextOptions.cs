@@ -2,7 +2,7 @@
 {
     public interface IContextOptions
     {
-        public bool IsPostgreSQL { get; set; }
+        public bool IsPostgreSql { get; set; }
         public string ConnectionString { get; set; }
     }
 }

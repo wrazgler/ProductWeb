@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
 
 using ProductWeb.Model.Interfaces;
 using ProductWeb.Model.Services;
@@ -25,27 +24,22 @@ namespace ProductWeb.Client
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("MSSQLConnection");
-            //string connection = Configuration.GetConnectionString("PostgreSQLConnection");
+            var connection = Configuration.GetConnectionString("MSSQLConnection");
+            //var connection = Configuration.GetConnectionString("PostgreSQLConnection");
 
-            var isPostgreSQL = false;
-
-            if (connection == Configuration.GetConnectionString("PostgreSQLConnection"))
-            {
-                isPostgreSQL = true;
-            }
+            var isPostgreSql = connection == Configuration.GetConnectionString("PostgreSQLConnection");
 
             services.AddScoped<IContextOptions>(contextOptions => 
                 new ContextOptions 
                 { 
                     ConnectionString = connection, 
-                    IsPostgreSQL = isPostgreSQL 
+                    IsPostgreSql = isPostgreSql 
                 }) ;
 
             services.AddScoped<IRepositoryContextFactory, RepositoryContextFactory>();
             
             services.AddScoped<IBaseRepository>(provider =>
-                new BaseRepository(connection, isPostgreSQL,
+                new BaseRepository(connection, isPostgreSql,
                     provider.GetService<IRepositoryContextFactory>()));
 
             

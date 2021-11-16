@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 
 using ProductWeb.Model.Models;
 
-using ProductWeb.Repository.Models;
-
 namespace ProductWeb.Model.Interfaces
 {
     public interface IProductService
@@ -15,7 +13,5 @@ namespace ProductWeb.Model.Interfaces
         Task EditAsync(ProductModel editProduct, SelectedModel selected);
         Task<AllProductsModel> GetAllAsync(string productName, int categoryId, int page, SortState sortOrder);
         Task<ProductModel> GetProductAsync(int id);
-        IEnumerable<ProductModel> Convert(IEnumerable<Product> products);
-        IEnumerable<ProductModel> Sort(SortState sortOrder, IEnumerable<ProductModel> products);
     }
 }

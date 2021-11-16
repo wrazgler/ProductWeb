@@ -5,7 +5,7 @@ namespace ProductWeb.Model.Models
     public class AllProductsModel
     {
         public IEnumerable<ProductModel> Products { get; set; }
-        public PageModel PageDTO { get; set; }
-        public SortModel SortDTO { get; set; }
+        public PageModel PageModel { get; set; }
+        public SortModel SortModel { get; set; }
     }
 }

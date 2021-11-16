@@ -12,7 +12,7 @@ namespace ProductWeb.Model.Services
 {
     public class CategoryService : ICategoryService
     {
-        IBaseRepository Database { get; set; }
+        private IBaseRepository Database { get; }
 
         public CategoryService(IBaseRepository baseRepository) 
         {
@@ -33,15 +33,11 @@ namespace ProductWeb.Model.Services
 
             var categories = Database.Categories.GetAll();
 
-            foreach (var c in categories)
-            {
-                if (c.Name.ToLower() == name.ToLower())
-                    return false;
-            }
+            if (categories.Any(c => c.Name.ToLower() == name.ToLower()))
+                return false;
 
             var category = new Category { Name = name };
             Database.Categories.Create(category);
-
             await Database.Save();
 
             return true;
@@ -65,7 +61,6 @@ namespace ProductWeb.Model.Services
         public SelectedModel CreateSelected()
         {
             var categories = Database.Categories.GetAll();
-
             var selected = new SelectedModel() 
             { 
                 SelectedList = categories
@@ -73,15 +68,14 @@ namespace ProductWeb.Model.Services
                 .Select(c => new SelectItem() { Category = c })
                 .ToList()
             };
+
             return selected;
         }
 
-        public async Task<SelectedModel> GetSelctedCategories(int productId)
+        public async Task<SelectedModel> GetSelectedCategories(int productId)
         {
             var product = await Database.Products.GetById(productId);
-
-            var categories = Database.Categories.GetAll();
-
+            var categories = Database.Categories.GetAll().ToList();
             var selected = new SelectedModel()
             {
                 SelectedList = categories
@@ -94,14 +88,7 @@ namespace ProductWeb.Model.Services
             {
                 var select = categories.FirstOrDefault(c => c.Name == item.Category.Name);
 
-                if (product.Categories.Contains(select))
-                {
-                    item.IsChecked = true;
-                }
-                else
-                {
-                    item.IsChecked = false;
-                }
+                item.IsChecked = product.Categories.Contains(@select);
             }
 
             return selected;

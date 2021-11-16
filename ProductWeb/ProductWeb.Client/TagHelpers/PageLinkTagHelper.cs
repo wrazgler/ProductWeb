@@ -11,10 +11,10 @@ namespace ProductWeb.Client.TagHelpers
 {
     public class PageLinkTagHelper : TagHelper
     {
-        private IUrlHelperFactory urlHelperFactory;
+        private readonly IUrlHelperFactory _urlHelperFactory;
         public PageLinkTagHelper(IUrlHelperFactory helperFactory)
         {
-            urlHelperFactory = helperFactory;
+            _urlHelperFactory = helperFactory;
         }
         [ViewContext]
         [HtmlAttributeNotBound]
@@ -27,7 +27,7 @@ namespace ProductWeb.Client.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
             output.TagName = "div";
 
             var tag = new TagBuilder("ul");
@@ -62,9 +62,13 @@ namespace ProductWeb.Client.TagHelpers
 
         TagBuilder CreateTag(int pageNumber, IUrlHelper urlHelper, bool corner)
         {
+            const string next = "Вперёд";
+            const string back = "Назад";
+
             var item = new TagBuilder("li");
             var link = new TagBuilder("a");
-            if (pageNumber == this.PageModel.PageNumber)
+            
+            if (pageNumber == PageModel.PageNumber)
             {
                 link.AddCssClass("active");
             }
@@ -84,18 +88,19 @@ namespace ProductWeb.Client.TagHelpers
                 link.InnerHtml.Append(pageNumber.ToString());
                 link.MergeAttribute("style", "width: 40px");
             }
-            if (pageNumber == (this.PageModel.PageNumber + 1) && corner)
+            if (pageNumber == (PageModel.PageNumber + 1) && corner)
             {
-                link.InnerHtml.Append("Вперёд");
+                link.InnerHtml.Append(next);
                 link.MergeAttribute("style", "width: 125px");
             }
-            if (pageNumber == (this.PageModel.PageNumber - 1) && corner)
+            if (pageNumber == (PageModel.PageNumber - 1) && corner)
             {
-                link.InnerHtml.Append("Назад");
+                link.InnerHtml.Append(back);
                 link.MergeAttribute("style", "width: 125px");
             }
 
             item.InnerHtml.AppendHtml(link);
+
             return item;
         }
     }

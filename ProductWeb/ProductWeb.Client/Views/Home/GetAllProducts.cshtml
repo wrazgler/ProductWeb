@@ -24,15 +24,15 @@
         <tr class="table-borderless">
             <td width="20%">
                 <div class="btn-group-vertical">
-                    <a style="color: #0066CC;" asp-action="AddProduct" asp-controller="Home" asp-route-page="@Model.AllProductsDTO.PageDTO.PageNumber">Добавить продукт</a>
+                    <a style="color: #0066CC;" asp-action="AddProduct" asp-controller="Home" asp-route-page="@Model.AllProductsModel.PageModel.PageNumber">Добавить продукт</a>
                 </div>
             </td>
             <td width="60%">
                 <div class="btn-group-vertical">
-                    <a style="color: #0066CC;" asp-action="AddCategory" asp-controller="Home" asp-route-page="@Model.AllProductsDTO.PageDTO.PageNumber" asp-route-previousPage="GetAllProducts">Добавить категорию</a>
+                    <a style="color: #0066CC;" asp-action="AddCategory" asp-controller="Home" asp-route-page="@Model.AllProductsModel.PageModel.PageNumber" asp-route-previousPage="GetAllProducts">Добавить категорию</a>
                 </div>
                 <div class="btn-group-vertical">
-                    <a style="margin-left: 50px; color: red;" asp-action="DeleteCategory" asp-controller="Home" asp-route-page="@Model.AllProductsDTO.PageDTO.PageNumber">Удалить категорию</a>
+                    <a style="margin-left: 50px; color: red;" asp-action="DeleteCategory" asp-controller="Home" asp-route-page="@Model.AllProductsModel.PageModel.PageNumber">Удалить категорию</a>
                 </div>
             </td>
 
@@ -41,9 +41,9 @@
             <th width="20%">
                 <a asp-action="GetAllProducts"
                    asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
-                   asp-route-page="@(Model.AllProductsDTO.PageDTO.PageNumber)"
+                   asp-route-page="@(Model.AllProductsModel.PageModel.PageNumber)"
                    asp-route-product="@(Model.FilterViewModel.SelectedProduct)"
-                   asp-route-sortOrder="@(Model.AllProductsDTO.SortDTO.ProductSort)">Продукт</a>
+                   asp-route-sortOrder="@(Model.AllProductsModel.SortModel.ProductSort)">Продукт</a>
             </th>
             <th>
                 <a style="color: #0066CC;">Категория</a>
@@ -52,7 +52,7 @@
             <th></th>
         </tr>
 
-        @foreach (var product in Model.AllProductsDTO.Products)
+        @foreach (var product in Model.AllProductsModel.Products)
         {
             <tr>
                 <td width="20%"><a>@product.Name</a></td>
@@ -62,8 +62,8 @@
                         <a>@category.Name</a>
                     }
                 </td>
-                <td width="10%"><a class="btn btn-sm btn-primary btn-custom-2" asp-action="EditProduct" asp-controller="Home" asp-route-id="@product.Id" asp-route-page="@Model.AllProductsDTO.PageDTO.PageNumber">Изменить</a></td>
-                <td width="10%"><a class="btn btn-sm btn-danger  btn-custom-2" asp-action="DeleteProduct" asp-controller="Home" asp-route-id="@product.Id" asp-route-page="@Model.AllProductsDTO.PageDTO.PageNumber">Удалить</a></td>
+                <td width="10%"><a class="btn btn-sm btn-primary btn-custom-2" asp-action="EditProduct" asp-controller="Home" asp-route-id="@product.Id" asp-route-page="@Model.AllProductsModel.PageModel.PageNumber">Изменить</a></td>
+                <td width="10%"><a class="btn btn-sm btn-danger  btn-custom-2" asp-action="DeleteProduct" asp-controller="Home" asp-route-id="@product.Id" asp-route-page="@Model.AllProductsModel.PageModel.PageNumber">Удалить</a></td>
             </tr>
         }
         <tr>
@@ -75,8 +75,8 @@
 
     </table>
 
-    <page-link page-model="@Model.AllProductsDTO.PageDTO" page-action="GetAllProducts"
+    <page-link page-model="@Model.AllProductsModel.PageModel" page-action="GetAllProducts"
                page-url-product="@(Model.FilterViewModel.SelectedProduct)"
                page-url-category="@(Model.FilterViewModel.SelectedCategory)"
-               page-url-sortorder="@(Model.AllProductsDTO.SortDTO.Current)"></page-link>
+               page-url-sortorder="@(Model.AllProductsModel.SortModel.Current)"></page-link>
 </div>

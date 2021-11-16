@@ -11,6 +11,6 @@ namespace ProductWeb.Model.Interfaces
         Task<bool> TryAddCategoryAsync(string name);
         Task DeleteCategoryAsync(SelectedModel selected);
         SelectedModel CreateSelected();
-        Task<SelectedModel> GetSelctedCategories(int productId);
+        Task<SelectedModel> GetSelectedCategories(int productId);
     }
 }

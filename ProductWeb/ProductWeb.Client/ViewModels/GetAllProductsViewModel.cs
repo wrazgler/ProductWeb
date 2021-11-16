@@ -4,7 +4,7 @@ namespace ProductWeb.Client.ViewModels
 {
     public class GetAllProductsViewModel
     {
-        public AllProductsModel AllProductsDTO { get; set; }
+        public AllProductsModel AllProductsModel { get; set; }
         public FilterViewModel FilterViewModel { get; set; }
     }
 }
