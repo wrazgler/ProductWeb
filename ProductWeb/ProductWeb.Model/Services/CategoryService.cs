@@ -19,9 +19,11 @@ namespace ProductWeb.Model.Services
             Database = baseRepository;
         }
 
-        public List<CategoryModel> GetAllCategories()
+        public async Task<List<CategoryModel>> GetAllCategoriesAsync()
         {
-            return Database.Categories.GetAll()
+            var categories = await Database.Categories.GetAllAsync();
+
+            return categories
                 .Select(c => new CategoryModel { Id = c.Id, Name = c.Name })
                 .ToList();
         }
@@ -37,7 +39,7 @@ namespace ProductWeb.Model.Services
                 return false;
 
             var category = new Category { Name = name };
-            Database.Categories.Create(category);
+            await Database.Categories.AddAsync(category);
             await Database.Save();
 
             return true;
@@ -58,9 +60,9 @@ namespace ProductWeb.Model.Services
             await Database.Save();
         }
 
-        public SelectedModel CreateSelected()
+        public async Task<SelectedModel> CreateSelectedAsync()
         {
-            var categories = Database.Categories.GetAll();
+            var categories = await Database.Categories.GetAllAsync();
             var selected = new SelectedModel() 
             { 
                 SelectedList = categories

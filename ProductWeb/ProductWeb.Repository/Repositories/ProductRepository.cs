@@ -23,6 +23,11 @@ namespace ProductWeb.Repository.Repositories
             return _db.Products.Include(p => p.Categories);
         }
 
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll());
+        }
+
         public async Task<Product> GetById(int id)
         {
             return await _db.Products
@@ -37,9 +42,14 @@ namespace ProductWeb.Repository.Repositories
                 .FirstOrDefaultAsync(p => p.Name == name);
         }
 
-        public void Create(Product product)
+        public void Add(Product product)
         {
             _db.Products.Add(product);
+        }
+
+        public async Task AddAsync(Product product)
+        {
+            await Task.Run(() => Add(product));
         }
 
         public void Update(Product product)
@@ -47,11 +57,21 @@ namespace ProductWeb.Repository.Repositories
             _db.Entry(product).State = EntityState.Modified;
         }
 
+        public async Task UpdateAsync(Product product)
+        {
+            await Task.Run(() => Update(product));
+        }
+
         public IEnumerable<Product> Find(Func<Product, Boolean> predicate)
         {
             return _db.Products
                 .Include(p => p.Categories)
                 .Where(predicate).ToList();
+        }
+
+        public async Task<IEnumerable<Product>> FindAsync(Func<Product, Boolean> predicate)
+        {
+            return await Task.Run(() => Find(predicate));
         }
 
         public async Task Delete(int id)

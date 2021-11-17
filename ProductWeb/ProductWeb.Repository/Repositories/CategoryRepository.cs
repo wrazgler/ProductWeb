@@ -23,6 +23,11 @@ namespace ProductWeb.Repository.Repositories
             return _db.Categories.Include(c => c.Products);
         }
 
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll());
+        }
+
         public async Task<Category> GetById(int id)
         {
             return await _db.Categories.FindAsync(id);
@@ -33,9 +38,14 @@ namespace ProductWeb.Repository.Repositories
             return await _db.Categories.FirstOrDefaultAsync(c => c.Name == name);
         }
 
-        public void Create(Category category)
+        public void Add(Category category)
         {
             _db.Categories.Add(category);
+        }
+
+        public async Task AddAsync(Category category)
+        {
+            await Task.Run(() => Add(category));
         }
 
         public void Update(Category category)
@@ -43,11 +53,21 @@ namespace ProductWeb.Repository.Repositories
             _db.Entry(category).State = EntityState.Modified;
         }
 
+        public async Task UpdateAsync(Category category)
+        {
+            await Task.Run(() => Update(category));
+        }
+
         public IEnumerable<Category> Find(Func<Category, Boolean> predicate)
         {
             return _db.Categories
                 .Include(c => c.Products)
                 .Where(predicate).ToList();
+        }
+
+        public async Task<IEnumerable<Category>> FindAsync(Func<Category, Boolean> predicate)
+        {
+            return await Task.Run(() => Find(predicate));
         }
 
         public async Task Delete(int id)

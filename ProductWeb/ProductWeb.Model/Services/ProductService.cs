@@ -20,10 +20,10 @@ namespace ProductWeb.Model.Services
             Database = baseRepository;
         }
 
-        public List<ProductModel> GetAllProducts()
+        public async Task<List<ProductModel>> GetAllProductsAsync()
         {
             var productsModels = new List<ProductModel>();
-            var products = Database.Products.GetAll();
+            var products = await Database.Products.GetAllAsync();
 
             foreach (var product in products)
             {
@@ -63,7 +63,7 @@ namespace ProductWeb.Model.Services
                     }
                 }
             }
-            Database.Products.Create(product);
+            await Database.Products.AddAsync(product);
             await Database.Save();
 
             return true;

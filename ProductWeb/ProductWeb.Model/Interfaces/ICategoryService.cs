@@ -7,10 +7,10 @@ namespace ProductWeb.Model.Interfaces
 {
     public interface ICategoryService
     {
-        List<CategoryModel> GetAllCategories();
+        Task<List<CategoryModel>> GetAllCategoriesAsync();
         Task<bool> TryAddCategoryAsync(string name);
         Task DeleteCategoryAsync(SelectedModel selected);
-        SelectedModel CreateSelected();
+        Task<SelectedModel> CreateSelectedAsync();
         Task<SelectedModel> GetSelectedCategories(int productId);
     }
 }

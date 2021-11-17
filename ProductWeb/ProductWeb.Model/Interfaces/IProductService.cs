@@ -7,7 +7,7 @@ namespace ProductWeb.Model.Interfaces
 {
     public interface IProductService
     {
-        List<ProductModel> GetAllProducts();
+        Task<List<ProductModel>> GetAllProductsAsync();
         Task<bool> TryAddProductAsync(SelectedModel selected, string name);
         Task DeleteProductAsync(int id);
         Task EditAsync(ProductModel editProduct, SelectedModel selected);

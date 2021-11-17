@@ -23,8 +23,8 @@ namespace ProductWeb.Client.Controllers
         public async Task<IActionResult> GetAllProducts(string productName, int categoryId, int page = 1,
             SortState sortOrder = SortState.ProductAsc)
         {
-            var products = _productService.GetAllProducts();
-            var categories = _categoryService.GetAllCategories();
+            var products = await _productService.GetAllProductsAsync();
+            var categories = await _categoryService.GetAllCategoriesAsync();
             var model = new GetAllProductsViewModel
             { 
                 FilterViewModel = new FilterViewModel(products, productName, categories, categoryId),
@@ -36,9 +36,9 @@ namespace ProductWeb.Client.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddProduct(int page = 1)
+        public async Task<IActionResult> AddProduct(int page = 1)
         {
-            var selected = _categoryService.CreateSelected();
+            var selected = await _categoryService.CreateSelectedAsync();
             var model = new AddProductViewModel() 
             { 
                 Page = page, 
@@ -60,14 +60,14 @@ namespace ProductWeb.Client.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddCategory(string previousPage, int id = 1, int page = 1)
+        public async Task<IActionResult> AddCategory(string previousPage, int id = 1, int page = 1)
         {
-            var model = new AddCategoryViewModel() 
-            { 
-                Id = id, 
-                Page = page, 
-                PreviousPage = previousPage 
-            };
+            var model = await Task.Run(() => new AddCategoryViewModel()
+            {
+                Id = id,
+                Page = page,
+                PreviousPage = previousPage
+            });
 
             return View(model);
         }
@@ -105,9 +105,9 @@ namespace ProductWeb.Client.Controllers
         }
 
         [HttpGet]
-        public IActionResult DeleteCategory(int page = 1)
+        public async Task<IActionResult> DeleteCategory(int page = 1)
         {
-            var selected = _categoryService.CreateSelected();
+            var selected = await _categoryService.CreateSelectedAsync();
             var model = new DeleteCategoryViewModel() { Page = page, Selected = selected };
 
             return View(model);
@@ -145,5 +145,4 @@ namespace ProductWeb.Client.Controllers
             return RedirectToAction("GetAllProducts", "Home", new { page = model.Page });
         }
     }
-
 }
