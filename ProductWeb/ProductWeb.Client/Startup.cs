@@ -35,17 +35,12 @@ namespace ProductWeb.Client
                     ConnectionString = connection, 
                     IsPostgreSql = isPostgreSql 
                 }) ;
-
             services.AddScoped<IRepositoryContextFactory, RepositoryContextFactory>();
-            
             services.AddScoped<IBaseRepository>(provider =>
                 new BaseRepository(connection, isPostgreSql,
                     provider.GetService<IRepositoryContextFactory>()));
-
-            
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
-
             services.AddControllersWithViews();
         }
 

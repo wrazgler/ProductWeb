@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-using ProductWeb.Model.Models;
-using ProductWeb.Model.Interfaces;
-
 using ProductWeb.Client.ViewModels;
+
+using ProductWeb.Model.Interfaces;
+using ProductWeb.Model.Models;
 
 namespace ProductWeb.Client.Controllers
 {
