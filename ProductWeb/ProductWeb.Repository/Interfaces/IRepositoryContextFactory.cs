@@ -1,7 +1,9 @@
-﻿namespace ProductWeb.Repository.Interfaces
+﻿using ProductWeb.Repository.Models;
+
+namespace ProductWeb.Repository.Interfaces
 {
     public interface IRepositoryContextFactory
     {
-        RepositoryContext CreateDbContext(string connectionString, bool IsPostgreSQL);
+        RepositoryContext CreateDbContext(string connectionString, DbProviderState dbProvider);
     }
 }

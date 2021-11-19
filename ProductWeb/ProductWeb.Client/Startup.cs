@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 using ProductWeb.Model.Interfaces;
 using ProductWeb.Model.Services;
@@ -10,6 +11,7 @@ using ProductWeb.Model.Services;
 using ProductWeb.Repository;
 using ProductWeb.Repository.Factories;
 using ProductWeb.Repository.Interfaces;
+using ProductWeb.Repository.Models;
 using ProductWeb.Repository.Repositories;
 
 namespace ProductWeb.Client 
@@ -24,20 +26,36 @@ namespace ProductWeb.Client
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration.GetConnectionString("MSSQLConnection");
-            //var connection = Configuration.GetConnectionString("PostgreSQLConnection");
+            var dbConnection = "MsSql"; // PostgreSql
 
-            var isPostgreSql = connection == Configuration.GetConnectionString("PostgreSQLConnection");
+            DbProviderState dbProvider;
+            string connection;
+
+            switch (dbConnection)
+            {
+                case "PostgreSql":
+                    dbProvider = DbProviderState.PostgreSql;
+                    connection = Configuration.GetConnectionString("PostgreSQLConnection");
+                    break;
+
+                case "MsSql":
+                    dbProvider = DbProviderState.MsSql;
+                    connection = Configuration.GetConnectionString("MSSQLConnection");
+                    break;
+
+                default:
+                    throw new Exception("База данных не выбрана");
+            }
 
             services.AddScoped<IContextOptions>(contextOptions => 
                 new ContextOptions 
                 { 
-                    ConnectionString = connection, 
-                    IsPostgreSql = isPostgreSql 
+                    ConnectionString = connection,
+                    DbProvider = dbProvider
                 }) ;
             services.AddScoped<IRepositoryContextFactory, RepositoryContextFactory>();
             services.AddScoped<IBaseRepository>(provider =>
-                new BaseRepository(connection, isPostgreSql,
+                new BaseRepository(connection, dbProvider,
                     provider.GetService<IRepositoryContextFactory>()));
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();

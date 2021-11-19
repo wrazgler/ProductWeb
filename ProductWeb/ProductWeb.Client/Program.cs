@@ -23,7 +23,7 @@ namespace ProductWeb.Client
                 {
                     var factory = services.GetRequiredService<IRepositoryContextFactory>();
                     var contextOptions = services.GetRequiredService<IContextOptions>();
-                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString, contextOptions.IsPostgreSql))
+                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString, contextOptions.DbProvider))
                     {
                         DbInitializer.Initialize(context);
                     }

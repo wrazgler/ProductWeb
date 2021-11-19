@@ -13,10 +13,10 @@ namespace ProductWeb.Repository.Repositories
         protected CategoryRepository CategoryRepository { get; set; }
         protected ProductRepository ProductRepository { get; set; }
 
-        public BaseRepository(string connectionString, bool isPostgreSql, IRepositoryContextFactory contextFactory)
+        public BaseRepository(string connectionString, DbProviderState dbProvider, IRepositoryContextFactory contextFactory)
         {
             ContextFactory = contextFactory;
-            Database = ContextFactory.CreateDbContext(connectionString, isPostgreSql);
+            Database = ContextFactory.CreateDbContext(connectionString, dbProvider);
         }
 
         public IRepository<Category> Categories

@@ -1,8 +1,10 @@
-﻿namespace ProductWeb.Repository.Interfaces
+﻿using ProductWeb.Repository.Models;
+
+namespace ProductWeb.Repository.Interfaces
 {
     public interface IContextOptions
     {
-        public bool IsPostgreSql { get; set; }
         public string ConnectionString { get; set; }
+        public DbProviderState DbProvider { get; set; }
     }
 }
