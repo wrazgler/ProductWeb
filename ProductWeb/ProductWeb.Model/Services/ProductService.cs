@@ -108,8 +108,6 @@ namespace ProductWeb.Model.Services
         public async Task<AllProductsModel> GetAllAsync(string productName, int categoryId, int page, 
             SortState sortOrder)
         {
-            const int pageSize = 10;
-
             List<Product> products;
 
             var currentCategory = await Database.Categories.GetById(categoryId);
@@ -136,11 +134,11 @@ namespace ProductWeb.Model.Services
             productsModel = Sort(sortOrder, productsModel).ToList();
 
             var count = productsModel.Count();
-            var items = productsModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var items = productsModel.Skip((page - 1) * PageModel.GetPageSize()).Take(PageModel.GetPageSize()).ToList();
 
             var allProductsModel = new AllProductsModel
             {
-                PageModel = new PageModel(count, page, pageSize),
+                PageModel = new PageModel(count, page),
                 SortModel = new SortModel(sortOrder),
                 Products = items
             };
