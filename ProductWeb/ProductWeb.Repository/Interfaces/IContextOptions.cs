@@ -5,6 +5,5 @@ namespace ProductWeb.Repository.Interfaces
     public interface IContextOptions
     {
         public string ConnectionString { get; set; }
-        public DbProviderState DbProvider { get; set; }
     }
 }

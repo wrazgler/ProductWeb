@@ -6,6 +6,5 @@ namespace ProductWeb.Repository
     public class ContextOptions : IContextOptions
     {
         public string ConnectionString { get; set; }
-        public DbProviderState DbProvider { get; set; }
     }
 }

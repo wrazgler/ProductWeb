@@ -26,36 +26,27 @@ namespace ProductWeb.Client
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            var dbConnection = "MsSql"; // PostgreSql
-
-            DbProviderState dbProvider;
-            string connection;
-
-            switch (dbConnection)
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddScoped<IContextOptions>(contextOptions =>
+                new ContextOptions
+                {
+                    ConnectionString = connectionString
+                });
+            var dbProvider = new DbProvider(Configuration);
+            var currentSQL = dbProvider.GetSQL(connectionString);
+            switch (currentSQL)
             {
-                case "PostgreSql":
-                    dbProvider = DbProviderState.PostgreSql;
-                    connection = Configuration.GetConnectionString("PostgreSQLConnection");
+                case DbProviderState.PostgreSQL:
+                    services.AddScoped<IRepositoryContextFactory, PostreSQLContextFactory>();
                     break;
-
-                case "MsSql":
-                    dbProvider = DbProviderState.MsSql;
-                    connection = Configuration.GetConnectionString("MSSQLConnection");
+                case DbProviderState.MsSQL:
+                    services.AddScoped<IRepositoryContextFactory, MsSQLContextFactory>();
                     break;
-
                 default:
-                    throw new Exception("База данных не выбрана");
+                    throw new Exception("SQl doesn't choose");
             }
-
-            services.AddScoped<IContextOptions>(contextOptions => 
-                new ContextOptions 
-                { 
-                    ConnectionString = connection,
-                    DbProvider = dbProvider
-                }) ;
-            services.AddScoped<IRepositoryContextFactory, RepositoryContextFactory>();
             services.AddScoped<IBaseRepository>(provider =>
-                new BaseRepository(connection, dbProvider,
+                new BaseRepository(connectionString,
                     provider.GetService<IRepositoryContextFactory>()));
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();

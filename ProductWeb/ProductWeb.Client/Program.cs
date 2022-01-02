@@ -23,7 +23,7 @@ namespace ProductWeb.Client
                 {
                     var factory = services.GetRequiredService<IRepositoryContextFactory>();
                     var contextOptions = services.GetRequiredService<IContextOptions>();
-                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString, contextOptions.DbProvider))
+                    using (var context = factory.CreateDbContext(contextOptions.ConnectionString))
                     {
                         DbInitializer.Initialize(context);
                     }

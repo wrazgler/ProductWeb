@@ -2,7 +2,7 @@
 {
     public enum DbProviderState
     {
-        MsSql,
-        PostgreSql
+        PostgreSQL,
+        MsSQL
     }
 }
