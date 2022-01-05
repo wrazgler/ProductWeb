@@ -1,6 +1,4 @@
-﻿using ProductWeb.Repository.Models;
-
-namespace ProductWeb.Repository.Interfaces
+﻿namespace ProductWeb.Repository.Interfaces
 {
     public interface IContextOptions
     {

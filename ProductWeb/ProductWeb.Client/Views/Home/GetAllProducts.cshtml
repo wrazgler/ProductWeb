@@ -40,9 +40,9 @@
         <tr>
             <th width="20%">
                 <a asp-action="GetAllProducts"
-                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-categoryId="@(Model.FilterViewModel.SelectedCategory)"
                    asp-route-page="@(Model.AllProductsModel.PageModel.PageNumber)"
-                   asp-route-product="@(Model.FilterViewModel.SelectedProduct)"
+                   asp-route-productName="@(Model.FilterViewModel.SelectedProduct)"
                    asp-route-sortOrder="@(Model.AllProductsModel.SortModel.ProductSort)">Продукт</a>
             </th>
             <th>
@@ -76,7 +76,7 @@
     </table>
 
     <page-link page-model="@Model.AllProductsModel.PageModel" page-action="GetAllProducts"
-               page-url-product="@(Model.FilterViewModel.SelectedProduct)"
-               page-url-category="@(Model.FilterViewModel.SelectedCategory)"
+               page-url-productName="@(Model.FilterViewModel.SelectedProduct)"
+               page-url-categoryId="@(Model.FilterViewModel.SelectedCategory)"
                page-url-sortorder="@(Model.AllProductsModel.SortModel.Current)"></page-link>
 </div>

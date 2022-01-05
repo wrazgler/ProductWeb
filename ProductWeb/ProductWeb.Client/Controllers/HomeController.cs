@@ -20,7 +20,9 @@ namespace ProductWeb.Client.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts(string productName, int categoryId, int page = 1,
+        public async Task<IActionResult> GetAllProducts(string productName, 
+            int categoryId, 
+            int page = 1,
             SortState sortOrder = SortState.ProductAsc)
         {
             var products = await _productService.GetAllProductsAsync();
@@ -56,7 +58,9 @@ namespace ProductWeb.Client.Controllers
 
             await _productService.TryAddProductAsync(model.Selected, model.Name);
 
-            return RedirectToAction("GetAllProducts", "Home", new { page = model.Page });
+            return RedirectToAction("GetAllProducts", 
+                "Home", 
+                new { page = model.Page });
         }
 
         [HttpGet]
@@ -80,7 +84,9 @@ namespace ProductWeb.Client.Controllers
 
             await _categoryService.TryAddCategoryAsync(model.Name);
 
-            return RedirectToAction($"{model.PreviousPage}", "Home", new { id = model.Id, page = model.Page });
+            return RedirectToAction($"{model.PreviousPage}",
+                "Home", 
+                new { id = model.Id, page = model.Page });
 
         }
 
@@ -101,7 +107,9 @@ namespace ProductWeb.Client.Controllers
 
             await _productService.DeleteProductAsync(model.Product.Id);
 
-            return RedirectToAction("GetAllProducts", "Home", new { page = model.Page });
+            return RedirectToAction("GetAllProducts",
+                "Home",
+                new { page = model.Page });
         }
 
         [HttpGet]
@@ -118,7 +126,9 @@ namespace ProductWeb.Client.Controllers
         {
             await _categoryService.DeleteCategoryAsync(model.Selected);
 
-            return RedirectToAction("GetAllProducts", "Home", new { page = model.Page });
+            return RedirectToAction("GetAllProducts",
+                "Home",
+                new { page = model.Page });
         }
 
         [HttpGet]
@@ -142,7 +152,9 @@ namespace ProductWeb.Client.Controllers
 
             await _productService.EditAsync(model.Product, model.Selected);
 
-            return RedirectToAction("GetAllProducts", "Home", new { page = model.Page });
+            return RedirectToAction("GetAllProducts",
+                "Home",
+                new { page = model.Page });
         }
     }
 }
